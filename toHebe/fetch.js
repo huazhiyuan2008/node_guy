@@ -1,7 +1,6 @@
-//依赖模块
+var cheerio = require('cheerio');
+var superagent = require('superagent');
 var fs = require('fs');
-var request = require("request");
-var cheerio = require("cheerio");
 var mkdirp = require('mkdirp');
 var crypto = require('crypto');
 
@@ -9,47 +8,55 @@ var crypto = require('crypto');
 var url = 'http://me2-sex.lofter.com/tag/美女摄影?page=1';
 
 //本地存储目录
-var dir = './images';
+var dir = './images/sex';
 
 //创建目录
-mkdirp(dir, function(err) {
-  console.log('mkdir===' + dir);
-  if(err){
+mkdirp(dir, function (err) {
+  if (err) {
     console.log(err);
   }
 });
 
-//发送请求
-request(url, function(error, response, body) {
-  if(!error && response.statusCode == 200) {
-    var $ = cheerio.load(body);
-    var max = 2;
-    var index = 0;
-
-    $('.img img').each(function() {
-      if (index++ >= max && max > 0) {
-        console.log('=======over max return=====');
-        return;
-      }
-      var src = $(this).attr('src');
-      console.log('正在下载' + src);
-      download(src, dir);
-      console.log('下载完成');
+// 开始下载
+var start = function () {
+  superagent.get(encodeURI(url)).end(function (err, sres) {
+    if (err) {
+      return next(err);
+    }
+    var $ = cheerio.load(sres.text);
+    console.log(sres.text);
+    var urls = [];
+    $('img').each(function (idx, element) {
+      var $element = $(element);
+      urls.push(
+        $element.attr('src')
+      );
     });
-  }
-});
 
-//下载方法
-var download = function(url, dir){
-  request.head(url, function(err, res, body){
-    request(url).pipe(fs.createWriteStream(dir + "/" + getMd5(url)));
+    console.log('共需下载' + urls.length);
+
+    var i = 0;
+    downloadUrls(urls, function () {
+      if (++i == urls.length) {
+        console.log('所有下载完成');
+      }
+    })
   });
 };
 
-var getMd5 = function(content) {
-  var md5 = crypto.createHash('md5');
-  md5.update(content);
-  var d = md5.digest('hex');  //MD5值是5f4dcc3b5aa765d61d8327deb882cf99
-  console.log(d);
-  return d;
+var downloadUrls = function (urls, callback) {
+  urls.forEach(function (url) {
+    var filePath = dir + "/" + getMd5(url) + ".jpg";
+    console.log('正在下载' + url + "---->" + filePath);
+    var stream = fs.createWriteStream(filePath);
+    superagent.get(url).pipe(stream);
+    console.log('下载完成');
+    callback();
+  });
 };
+
+var getMd5 = function (content) {
+  return crypto.createHash('md5').update(content).digest('hex');
+};
+
+start();

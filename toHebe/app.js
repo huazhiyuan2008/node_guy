@@ -20,7 +20,7 @@ mkdirp(dir, function (err) {
 
 // 开始下载
 var start = function () {
-  superagent.get(url).end(function (err, sres) {
+  superagent.get(encodeURI(url)).end(function (err, sres) {
     if (err) {
       return next(err);
     }
