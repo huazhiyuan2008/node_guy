@@ -4,11 +4,12 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var crypto = require('crypto');
 
-//目标网址
-var url = 'http://me2-sex.lofter.com/tag/美女摄影?page=1';
+// 目标网址
+var url = 'http://tieba.baidu.com/p/4114929893?fr=ala0&pstaala=1';
+//url = 'http://me2-sex.lofter.com/tag/美女摄影?page=1';
 
-//本地存储目录
-var dir = './images/sex';
+// 本地存储目录
+var dir = './images';
 
 //创建目录
 mkdirp(dir, function (err) {
@@ -24,10 +25,10 @@ var start = function () {
       return next(err);
     }
     var $ = cheerio.load(sres.text);
-    console.log(sres.text);
     var urls = [];
-    $('img').each(function (idx, element) {
+    $('img.BDE_Image').each(function (idx, element) {
       var $element = $(element);
+      //console.log('$element===>' + $element);
       urls.push(
         $element.attr('src')
       );
