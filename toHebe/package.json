@@ -1,0 +1,19 @@
+{
+  "name": "tohebe",
+  "version": "1.0.0",
+  "description": "to hebe",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hebe"
+  ],
+  "author": "jameson.hua",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "mkdirp": "^0.5.1",
+    "superagent": "^1.4.0"
+  }
+}
