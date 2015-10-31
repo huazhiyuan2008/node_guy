@@ -1,5 +1,5 @@
 ## 女神镇楼
-!(Hebe)[https://raw.githubusercontent.com/huazhiyuan2008/node_guy/master/toHebe/res/Hebe.jpg]
+![Hebe](./res/Hebe.jpg)
 
 ## 瞎掰
 [2015.10.20 上海米亚妮亚拼盘演唱会~ 馥甄大图~](http://tieba.baidu.com/p/4114929893?fr=ala0&pstaala=1)
